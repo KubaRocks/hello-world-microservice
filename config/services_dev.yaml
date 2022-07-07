@@ -1,0 +1,14 @@
+---
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Tests\Behat\:
+    resource: '%kernel.project_dir%/tests/behat/src/*'
+
+when@dev:
+  services:
+    Psr\Log\NullLogger: ~
+    
+    Symfony\Component\HttpKernel\KernelInterface: '@kernel'

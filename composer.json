@@ -1,0 +1,132 @@
+{
+  "name": "cushon/hubspot-adapter",
+  "description": "A lightweight message-driven integration with the Hubspot API (https://developers.hubspot.com/docs/api/overview)",
+  "license": "Proprietary",
+  "type": "project",
+  "require": {
+    "php": "^8.1",
+    "ext-zend-opcache": "*",
+    "cushon/health-bundle": "^0.1.0",
+    "ergebnis/json-printer": "^3.2",
+    "psr/container": "^1.1",
+    "psr/log": "^2.0",
+    "symfony/dependency-injection": "^6.1",
+    "symfony/dotenv": "^6.1",
+    "symfony/framework-bundle": "^6.1",
+    "symfony/messenger": "^6.1",
+    "symfony/runtime": "^6.1",
+    "symfony/uid": "^6.1",
+    "symfony/yaml": "^6.1",
+    "thecodingmachine/safe": "^2.1",
+    "webmozart/assert": "^1.11"
+  },
+  "require-dev": {
+    "brianium/paratest": "^6.4",
+    "dvdoug/behat-code-coverage": "^5.2",
+    "friends-of-behat/symfony-extension": "^2.3",
+    "jangregor/phpstan-prophecy": "^1.0",
+    "php-ds/php-ds": "^1.4",
+    "roave/security-advisories": "dev-latest",
+    "shrikeh/testing-metapackage": "^0.2.0",
+    "symfony/flex": "2.x-dev",
+    "symfony/phpunit-bridge": "^6.1"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Api\\": "src/api",
+      "App\\": "src/app",
+      "Infra\\": "src/infra/",
+      "Cushon\\BusinessConcept\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Utils\\": "tests/utils/src",
+      "Tests\\Behat\\": "tests/behat/src",
+      "Tests\\Unit\\App\\": "tests/unit/src/app/",
+      "Tests\\Unit\\Api\\": "tests/unit/src/api/",
+      "Tests\\Unit\\Infra\\": "tests/unit/src/infra/",
+      "Tests\\Unit\\HubspotAdapter\\": "tests/unit/src/HubspotAdapter",
+      "Cushon\\DevUtils\\": "utils/src"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true,
+      "ergebnis/composer-normalize": true,
+      "infection/extension-installer": true,
+      "phpstan/extension-installer": true,
+      "symfony/flex": true,
+      "symfony/runtime": true
+    },
+    "optimize-autoloader": true,
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true
+  },
+  "extra": {
+    "composer-normalize": {
+      "indent-size": 2,
+      "indent-style": "space"
+    },
+    "config-dir": "config",
+    "public-dir": "public",
+    "src-dir": "app/src",
+    "symfony": {
+      "allow-contrib": false,
+      "require": "^6.1"
+    },
+    "var-dir": "var"
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "@composer normalize",
+      "@test"
+    ],
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    },
+    "behat": "vendor/bin/behat",
+    "fix": [
+      "@phpcbf",
+      "@psalm-fix",
+      "@composer normalize"
+    ],
+    "infection": "php -d pcov.enabled=1 vendor/bin/infection --threads=8",
+    "metrics": [
+      "@phpunit:all",
+      "@phpmetrics"
+    ],
+    "phpcbf": "vendor/bin/phpcbf",
+    "phpcs": "vendor/bin/phpcs",
+    "phpmd": "vendor/bin/phpmd src text ./phpmd.xml.dist",
+    "phpmetrics": "php -d 'error_reporting=E_ALL ^ E_DEPRECATED' vendor/bin/phpmetrics --config=.phpmetrics.json",
+    "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon.dist",
+    "phpunit": [
+      "@phpunit:all",
+      "@infection"
+    ],
+    "phpunit:all": "vendor/bin/phpunit --coverage-text --coverage-cobertura ${COVERAGE_DIR:-build/coverage}/cobertura.xml --coverage-clover ${COVERAGE_DIR:-build/coverage}/clover.xml",
+    "phpunit:parallel": "php -d pcov.enabled=1 vendor/bin/paratest --coverage-text -p8 --colors --parallel-suite --runner=WrapperRunner --stop-on-failure",
+    "psalm": "vendor/bin/psalm --no-diff",
+    "psalm-fix": "vendor/bin/psalm --alter --issues=all --dry-run",
+    "quality": [
+      "@phpcs",
+      "@phpmd",
+      "@phpstan",
+      "@psalm"
+    ],
+    "test": [
+      "@phpunit",
+      "@behat"
+    ],
+    "unit": [
+      "@phpunit:parallel",
+      "@infection"
+    ]
+  }
+}

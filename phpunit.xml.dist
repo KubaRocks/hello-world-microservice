@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+         cacheResult="true"
+         cacheResultFile="build/cache/.phpunit.result.cache"
+         convertDeprecationsToExceptions="false"
+         executionOrder="random"
+>
+    <php>
+        <ini name="display_errors" value="1" />
+        <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Application-level Unit Test Suite">
+            <directory>tests/unit/src/app</directory>
+        </testsuite>
+        <testsuite name="Api-level Unit Test Suite">
+            <directory>tests/unit/src/api</directory>
+        </testsuite>
+        <testsuite name="Infrastructure-level Unit Test Suite">
+            <directory>tests/unit/src/infra</directory>
+        </testsuite>
+        <testsuite name="Domain-level Unit Test Suite">
+            <directory>tests/unit/src/domain</directory>
+        </testsuite>
+    </testsuites>
+    <coverage processUncoveredFiles="true">
+        <report>
+            <clover outputFile="build/coverage/clover.xml"/>
+            <text outputFile="build/coverage/coverage.txt" showUncoveredFiles="true" showOnlySummary="false" />
+            <xml outputDirectory="build/coverage/coverage-xml" />
+        </report>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
+    <logging>
+        <junit outputFile="build/coverage/junit.xml"/>
+    </logging>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
+    <!-- Run `composer require symfony/panther` before enabling this extension -->
+    <!--
+    <extensions>
+        <extension class="Symfony\Component\Panther\ServerExtension" />
+    </extensions>
+    -->
+</phpunit>

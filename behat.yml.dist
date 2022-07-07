@@ -1,0 +1,18 @@
+---
+default:
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      bootstrap: "tests/bootstrap.php"
+      kernel:
+        class: Infra\Kernel
+    DVDoug\Behat\CodeCoverage\Extension:
+      reports:
+        php:
+          target: build/coverage/behat.cov
+      filter:
+        include:
+          directories:
+            'src': ~
+
+  suites: []
+

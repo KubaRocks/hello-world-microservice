@@ -1,0 +1,30 @@
+---
+version: '3.7'
+
+services:
+  app:
+    image: "cushon/${SERVICE_IMAGE_NAME?err}:${SERVICE_IMAGE_TAG:-latest}"
+    build:
+      context: ./
+      dockerfile: docker/services/app/Dockerfile
+    environment:
+      APP_CODE_DIR: '/cushon'
+      APP_CACHE_DIR: '/cache'
+      APP_LOG_DIR: '/logs'
+    restart: unless-stopped
+    networks:
+      - app
+  nginx:
+    build:
+      context: docker/services/nginx
+      dockerfile: Dockerfile
+    environment:
+      APP_CODE_DIR: '/cushon'
+      NGINX_PORT: "${NGINX_PORT:-8080}"
+    networks:
+      - app
+    restart: unless-stopped
+    ports:
+      - "${HOST_NGINX_PORT:-9001}:${NGINX_PORT:-8080}"
+networks:
+  app:

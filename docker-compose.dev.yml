@@ -1,0 +1,28 @@
+---
+version: '3.7'
+
+services:
+  app:
+    volumes:
+      - './:/cushon'
+      - './build/logs:/logs'
+      - './build/cache:/cache'
+    environment:
+      APP_ENV: "${APP_ENV:-dev}"
+      ENV_LOCAL_FILE: "${ENV_LOCAL_FILE:-.env.local}"
+  nginx:
+    volumes:
+      - './docker/services/nginx/templates:/etc/nginx/templates:ro'
+  docs:
+    build:
+      context: docker/services/docs
+      dockerfile: Dockerfile
+    volumes:
+      - './:/cushon:ro'
+      - './docker/services/docs/templates:/etc/nginx/templates:ro'
+    restart: unless-stopped
+    environment:
+      APP_CODE_DIR: '/cushon'
+      DOCS_PORT: "${DOCS_PORT:-8082}"
+    ports:
+      - "${HOST_DOCS_PORT:-8082}:${DOCS_PORT:-8082}"

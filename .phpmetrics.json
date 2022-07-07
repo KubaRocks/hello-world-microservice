@@ -1,0 +1,17 @@
+{
+  "includes": [
+    "src"
+  ],
+  "exclude": [
+    "build",
+    "vendor"
+  ],
+  "report": {
+    "html": "docs/metrics"
+  },
+  "plugins": {
+    "junit": {
+      "file": "build/coverage/junit.xml"
+    }
+  }
+}
